@@ -1,0 +1,23 @@
+---
+title: "Memoire R"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readr)
+library(rtweet)
+library(lubridate)
+```
+
+```{r}
+setwd("C:/Users/Olivier/Desktop/Cours IREN/Memoire/")
+data_covid <- readRDS("df_0001002.rds")
+```
+```{r}
+head(data_covid, 10)
+```
