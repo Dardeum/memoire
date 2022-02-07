@@ -11,19 +11,13 @@ library(lubridate)
 library(dplyr)
 library(data.table)
 library(cleanNLP)
+library(foreach)
 ```
 
 ```{r}
 #setwd("C:/Users/Olivier/Desktop/Cours_IREN/Memoire/")
 #data_covid50 <- readRDS("sample_50k.rds")
 #data_covid <- readRDS("df_0001002.rds")
-```
-
-```{r remove emotes}
-#create new column text_noemote by removing emotes from tweets
-data_covid %>%
-  select(text) %>%
-    text_noemote <- 
 ```
 
 ```{r fichier de travail}
@@ -35,6 +29,39 @@ data_covid %>%
 #saveRDS(head1kk,"head1k.rds")
 test <- readRDS("head1k.rds")
 ```
+
+```{r}
+Textprocessing <- function(tweet_text)
+  {
+  tweet_text <- gsub("http[[:alnum:]]*",'', tweet_text)
+  tweet_text <- gsub("[^\x01-\x7F]", "", tweet_text) ## Delete all non-ASCII characters
+  tweet_text <- gsub('http\\S+\\s*', '', tweet_text) ## Remove URLs
+  tweet_text <- gsub('\\b+RT', '', tweet_text) ## Remove RT
+  tweet_text <- gsub('#\\S+', '', tweet_text) ## Remove Hashtags
+  tweet_text <- gsub('@\\S+', '', tweet_text) ## Remove Mentions
+  tweet_text <- gsub('[[:cntrl:]]', '', tweet_text) ## Remove Controls and special characters
+  tweet_text <- gsub("\\d", '', tweet_text) ## Remove Controls and special characters
+  tweet_text <- gsub('[[:punct:]]', '', tweet_text) ## Remove Punctuations
+  tweet_text <- gsub("^[[:space:]]*","",tweet_text) ## Remove leading whitespaces
+  tweet_text <- gsub("[[:space:]]*$","",tweet_text) ## Remove trailing whitespaces
+  tweet_text <- gsub(' +',' ',tweet_text) ## Remove extra whitespaces
+  return (tweet_text)
+}
+```
+
+```{r remove mentions, urls, emojis, numbers, punctuations, etc.}
+#create new column text_noemote by removing emotes from tweets
+#test <- test %>% add_column(text_clean = "" )  #on crée une colonne "text_clean" initialisée à vide
+nrow <- nrow(test) #nombre de lignes
+ncol <- ncol(test) #nombre de colonnes
+index_text_column <- which(colnames(test)=="text") #on récupère l'index de la colonne "text" 
+for (i in 1:nrow) 
+  {
+    test[i,ncol] <- Textprocessing(test[i,index_text_column])
+}
+
+```
+
 
 ```{r}
 #sample <- head(data_covid, 10000)
