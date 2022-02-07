@@ -1,0 +1,42 @@
+---
+title: "R Tips"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(readr)
+library(rtweet)
+library(lubridate)
+library(dplyr)
+library(data.table)
+library(cleanNLP)
+library(foreach)
+```
+
+```{r remote hashtag}
+phrase <- "hello #corona@@ #ca ###va!? bien]]]"
+str_remove_all(phrase,"#|@")
+```
+```{r}
+write.csv(Yourdata,"Path to export the DataFrame\\File Name.csv", row.names = FALSE)
+```
+
+```{r clean french tweets text data to prepare for NLP analysis}
+  tweet_text <- "Bonjour !! Je m'appelle Olivier et ce que j'adore c'est nettoyer les tweets #tropfun https://www.youtube.com/watch?v=5SIQPfeUTtg&ab_channel=momolepatate 😂😂😂😂😂 keskonsmarre   en 2021!!!  "
+  tweet_text <- gsub('\\p{So}|\\p{Cn}', '', tweet_text, perl = TRUE) #delete emotes
+  tweet_text <- gsub('http\\S+\\s*', '', tweet_text) ## Remove URLs
+  tweet_text <- gsub('\\b+RT', '', tweet_text) ## Remove RT 
+  tweet_text <- gsub('#', '', tweet_text) ## Remove Hashtags
+  tweet_text <- gsub('@\\S+', '', tweet_text) ## Remove Mentions
+  #tweet_text <- gsub('[[:punct:]]', '', tweet_text) ## Remove Punctuations
+  tweet_text <- gsub("(?!')[[:punct:]]", "", tweet_text, perl=TRUE) #remove ponctuations except apostrophe
+  tweet_text <- gsub('[[:digit:]]', '', tweet_text) #remove numeric values
+  tweet_text <- str_remove_all(tweet_text,"»|«") #remove fancy quotation marks « and »
+  tweet_text <- gsub("^[[:space:]]*","",tweet_text) ## Remove leading whitespaces
+  tweet_text <- tolower(tweet_text)
+  tweet_text <- gsub("[[:space:]]*$","",tweet_text) ## Remove trailing whitespaces
+  tweet_text <- gsub(' +',' ',tweet_text) ## Remove extra whitespaces
+  tweet_text
+```
+
