@@ -14,16 +14,22 @@ library(cleanNLP)
 library(foreach)
 ```
 
+```{r creer colonne mutate et add_column}
+test <- mutate(test, text_clean = "")
+test <- test %>% add_column(text_clean = "" )  #on crée une colonne "text_clean" initialisée à vide
+```
+
 ```{r remote hashtag}
 phrase <- "hello #corona@@ #ca ###va!? bien]]]"
 str_remove_all(phrase,"#|@")
 ```
-```{r}
+```{r rengistrer fichiers}
 write.csv(Yourdata,"Path to export the DataFrame\\File Name.csv", row.names = FALSE)
+saveRDS(sample,"./sample.rds")
 ```
 
 ```{r clean french tweets text data to prepare for NLP analysis}
-  tweet_text <- "Bonjour !! Je m'appelle Olivier et ce que j'adore c'est nettoyer les tweets #tropfun https://www.youtube.com/watch?v=5SIQPfeUTtg&ab_channel=momolepatate 😂😂😂😂😂 keskonsmarre   en 2021!!!  "
+  tweet_text <- "Bonjour !! Je m'appelle Olivier et ce que j'adore c'est nettoyer les tweets #tropfun https://www.youtube.com/watch?v=5SIQPfeUTtg&ab_channel=momolepatate 😂😂😂😂😂 keskonsmarre   en 2022!!!  "
   tweet_text <- gsub('\\p{So}|\\p{Cn}', '', tweet_text, perl = TRUE) #delete emotes
   tweet_text <- gsub('http\\S+\\s*', '', tweet_text) ## Remove URLs
   tweet_text <- gsub('\\b+RT', '', tweet_text) ## Remove RT 
